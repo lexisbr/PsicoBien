@@ -1,79 +1,71 @@
 var DataTypes = require("sequelize").DataTypes;
-var _agenda = require("./agenda");
-var _ciudad = require("./ciudad");
-var _clinica = require("./clinica");
-var _especialidades = require("./especialidades");
-var _estado = require("./estado");
+var _agendas = require("./agendas");
+var _ciudades = require("./ciudades");
+var _clinicas = require("./clinicas");
+var _estados = require("./estados");
 var _estados_eventos = require("./estados_eventos");
-var _evento = require("./evento");
-var _factura = require("./factura");
-var _historial_clinico = require("./historial_clinico");
+var _eventos = require("./eventos");
+var _facturas = require("./facturas");
+var _historiales_clinicos = require("./historiales_clinicos");
 var _horarios_disponibles = require("./horarios_disponibles");
 var _idiomas = require("./idiomas");
 var _mediciones = require("./mediciones");
-var _mensaje = require("./mensaje");
 var _notas = require("./notas");
 var _notas_mediciones = require("./notas_mediciones");
 var _opciones_mediciones = require("./opciones_mediciones");
-var _pais = require("./pais");
+var _paises = require("./paises");
 var _profesional_especialidades = require("./profesional_especialidades");
 var _profesional_idiomas = require("./profesional_idiomas");
 var _profesionales = require("./profesionales");
 var _tipos_eventos = require("./tipos_eventos");
-var _titulo_profesional = require("./titulo_profesional");
-var _usuario = require("./usuario");
+var _tipos_usuario = require("./tipos_usuario");
+var _titulos_profesional = require("./titulos_profesional");
+var _usuarios = require("./usuarios");
 
 function initModels(sequelize) {
-  var agenda = _agenda(sequelize, DataTypes);
-  var ciudad = _ciudad(sequelize, DataTypes);
-  var clinica = _clinica(sequelize, DataTypes);
-  var especialidades = _especialidades(sequelize, DataTypes);
-  var estado = _estado(sequelize, DataTypes);
+  var agendas = _agendas(sequelize, DataTypes);
+  var ciudades = _ciudades(sequelize, DataTypes);
+  var clinicas = _clinicas(sequelize, DataTypes);
+  var estados = _estados(sequelize, DataTypes);
   var estados_eventos = _estados_eventos(sequelize, DataTypes);
-  var evento = _evento(sequelize, DataTypes);
-  var factura = _factura(sequelize, DataTypes);
-  var historial_clinico = _historial_clinico(sequelize, DataTypes);
+  var eventos = _eventos(sequelize, DataTypes);
+  var facturas = _facturas(sequelize, DataTypes);
+  var historiales_clinicos = _historiales_clinicos(sequelize, DataTypes);
   var horarios_disponibles = _horarios_disponibles(sequelize, DataTypes);
   var idiomas = _idiomas(sequelize, DataTypes);
   var mediciones = _mediciones(sequelize, DataTypes);
-  var mensaje = _mensaje(sequelize, DataTypes);
   var notas = _notas(sequelize, DataTypes);
   var notas_mediciones = _notas_mediciones(sequelize, DataTypes);
   var opciones_mediciones = _opciones_mediciones(sequelize, DataTypes);
-  var pais = _pais(sequelize, DataTypes);
+  var paises = _paises(sequelize, DataTypes);
   var profesional_especialidades = _profesional_especialidades(sequelize, DataTypes);
   var profesional_idiomas = _profesional_idiomas(sequelize, DataTypes);
   var profesionales = _profesionales(sequelize, DataTypes);
   var tipos_eventos = _tipos_eventos(sequelize, DataTypes);
-  var titulo_profesional = _titulo_profesional(sequelize, DataTypes);
-  var usuario = _usuario(sequelize, DataTypes);
+  var tipos_usuario = _tipos_usuario(sequelize, DataTypes);
+  var titulos_profesional = _titulos_profesional(sequelize, DataTypes);
+  var usuarios = _usuarios(sequelize, DataTypes);
 
-  especialidades.belongsToMany(profesionales, { as: 'colegiadoProfesional_profesionales', through: profesional_especialidades, foreignKey: "idEspecialidad", otherKey: "colegiadoProfesional" });
   mediciones.belongsToMany(notas, { as: 'idNota_nota', through: notas_mediciones, foreignKey: "idMedicion", otherKey: "idNota" });
   notas.belongsToMany(mediciones, { as: 'idMedicion_mediciones', through: notas_mediciones, foreignKey: "idNota", otherKey: "idMedicion" });
-  profesionales.belongsToMany(especialidades, { as: 'idEspecialidad_especialidades', through: profesional_especialidades, foreignKey: "colegiadoProfesional", otherKey: "idEspecialidad" });
-  usuario.belongsToMany(usuario, { as: 'dniUsuarioReceptor_usuarios', through: mensaje, foreignKey: "dniUsuarioRemitente", otherKey: "dniUsuarioReceptor" });
-  usuario.belongsToMany(usuario, { as: 'dniUsuarioRemitente_usuarios', through: mensaje, foreignKey: "dniUsuarioReceptor", otherKey: "dniUsuarioRemitente" });
-  evento.belongsTo(agenda, { as: "idAgenda_agenda", foreignKey: "idAgenda"});
-  agenda.hasMany(evento, { as: "eventos", foreignKey: "idAgenda"});
-  clinica.belongsTo(ciudad, { as: "idCiudad_ciudad", foreignKey: "idCiudad"});
-  ciudad.hasMany(clinica, { as: "clinicas", foreignKey: "idCiudad"});
-  usuario.belongsTo(ciudad, { as: "idCiudad_ciudad", foreignKey: "idCiudad"});
-  ciudad.hasMany(usuario, { as: "usuarios", foreignKey: "idCiudad"});
-  horarios_disponibles.belongsTo(clinica, { as: "idClinica_clinica", foreignKey: "idClinica"});
-  clinica.hasMany(horarios_disponibles, { as: "horarios_disponibles", foreignKey: "idClinica"});
-  profesional_especialidades.belongsTo(especialidades, { as: "idEspecialidad_especialidade", foreignKey: "idEspecialidad"});
-  especialidades.hasMany(profesional_especialidades, { as: "profesional_especialidades", foreignKey: "idEspecialidad"});
-  ciudad.belongsTo(estado, { as: "idEstado_estado", foreignKey: "idEstado"});
-  estado.hasMany(ciudad, { as: "ciudads", foreignKey: "idEstado"});
-  evento.belongsTo(estados_eventos, { as: "idEstadosEventos_estados_evento", foreignKey: "idEstadosEventos"});
-  estados_eventos.hasMany(evento, { as: "eventos", foreignKey: "idEstadosEventos"});
-  factura.belongsTo(evento, { as: "idEvento_evento", foreignKey: "idEvento"});
-  evento.hasMany(factura, { as: "facturas", foreignKey: "idEvento"});
-  notas.belongsTo(evento, { as: "idEvento_evento", foreignKey: "idEvento"});
-  evento.hasMany(notas, { as: "nota", foreignKey: "idEvento"});
-  notas.belongsTo(historial_clinico, { as: "idHistorialClinico_historial_clinico", foreignKey: "idHistorialClinico"});
-  historial_clinico.hasMany(notas, { as: "nota", foreignKey: "idHistorialClinico"});
+  eventos.belongsTo(agendas, { as: "idAgenda_agenda", foreignKey: "idAgenda"});
+  agendas.hasMany(eventos, { as: "eventos", foreignKey: "idAgenda"});
+  clinicas.belongsTo(ciudades, { as: "idCiudad_ciudade", foreignKey: "idCiudad"});
+  ciudades.hasMany(clinicas, { as: "clinicas", foreignKey: "idCiudad"});
+  usuarios.belongsTo(ciudades, { as: "idCiudad_ciudade", foreignKey: "idCiudad"});
+  ciudades.hasMany(usuarios, { as: "usuarios", foreignKey: "idCiudad"});
+  horarios_disponibles.belongsTo(clinicas, { as: "idClinica_clinica", foreignKey: "idClinica"});
+  clinicas.hasMany(horarios_disponibles, { as: "horarios_disponibles", foreignKey: "idClinica"});
+  ciudades.belongsTo(estados, { as: "idEstado_estado", foreignKey: "idEstado"});
+  estados.hasMany(ciudades, { as: "ciudades", foreignKey: "idEstado"});
+  eventos.belongsTo(estados_eventos, { as: "idEstadosEventos_estados_evento", foreignKey: "idEstadosEventos"});
+  estados_eventos.hasMany(eventos, { as: "eventos", foreignKey: "idEstadosEventos"});
+  facturas.belongsTo(eventos, { as: "idEvento_evento", foreignKey: "idEvento"});
+  eventos.hasMany(facturas, { as: "facturas", foreignKey: "idEvento"});
+  notas.belongsTo(eventos, { as: "idEvento_evento", foreignKey: "idEvento"});
+  eventos.hasMany(notas, { as: "nota", foreignKey: "idEvento"});
+  notas.belongsTo(historiales_clinicos, { as: "idHistorialClinico_historiales_clinico", foreignKey: "idHistorialClinico"});
+  historiales_clinicos.hasMany(notas, { as: "nota", foreignKey: "idHistorialClinico"});
   profesional_idiomas.belongsTo(idiomas, { as: "idIdioma_idioma", foreignKey: "idIdioma"});
   idiomas.hasOne(profesional_idiomas, { as: "profesional_idioma", foreignKey: "idIdioma"});
   notas_mediciones.belongsTo(mediciones, { as: "idMedicion_medicione", foreignKey: "idMedicion"});
@@ -84,57 +76,54 @@ function initModels(sequelize) {
   notas.hasMany(notas_mediciones, { as: "notas_mediciones", foreignKey: "idNota"});
   notas_mediciones.belongsTo(opciones_mediciones, { as: "idOpcionSeleccionada_opciones_medicione", foreignKey: "idOpcionSeleccionada"});
   opciones_mediciones.hasMany(notas_mediciones, { as: "notas_mediciones", foreignKey: "idOpcionSeleccionada"});
-  estado.belongsTo(pais, { as: "idPais_pai", foreignKey: "idPais"});
-  pais.hasMany(estado, { as: "estados", foreignKey: "idPais"});
-  agenda.belongsTo(profesionales, { as: "colegiadoProfesional_profesionale", foreignKey: "colegiadoProfesional"});
-  profesionales.hasMany(agenda, { as: "agendas", foreignKey: "colegiadoProfesional"});
-  clinica.belongsTo(profesionales, { as: "colegiadoProfesional_profesionale", foreignKey: "colegiadoProfesional"});
-  profesionales.hasMany(clinica, { as: "clinicas", foreignKey: "colegiadoProfesional"});
-  historial_clinico.belongsTo(profesionales, { as: "colegiadoProfesional_profesionale", foreignKey: "colegiadoProfesional"});
-  profesionales.hasMany(historial_clinico, { as: "historial_clinicos", foreignKey: "colegiadoProfesional"});
+  estados.belongsTo(paises, { as: "idPais_paise", foreignKey: "idPais"});
+  paises.hasMany(estados, { as: "estados", foreignKey: "idPais"});
+  agendas.belongsTo(profesionales, { as: "colegiadoProfesional_profesionale", foreignKey: "colegiadoProfesional"});
+  profesionales.hasMany(agendas, { as: "agendas", foreignKey: "colegiadoProfesional"});
+  clinicas.belongsTo(profesionales, { as: "colegiadoProfesional_profesionale", foreignKey: "colegiadoProfesional"});
+  profesionales.hasMany(clinicas, { as: "clinicas", foreignKey: "colegiadoProfesional"});
+  historiales_clinicos.belongsTo(profesionales, { as: "colegiadoProfesional_profesionale", foreignKey: "colegiadoProfesional"});
+  profesionales.hasMany(historiales_clinicos, { as: "historiales_clinicos", foreignKey: "colegiadoProfesional"});
   profesional_especialidades.belongsTo(profesionales, { as: "colegiadoProfesional_profesionale", foreignKey: "colegiadoProfesional"});
   profesionales.hasMany(profesional_especialidades, { as: "profesional_especialidades", foreignKey: "colegiadoProfesional"});
   profesional_idiomas.belongsTo(profesionales, { as: "colegiadoProfesional_profesionale", foreignKey: "colegiadoProfesional"});
   profesionales.hasMany(profesional_idiomas, { as: "profesional_idiomas", foreignKey: "colegiadoProfesional"});
-  titulo_profesional.belongsTo(profesionales, { as: "colegiadoProfesional_profesionale", foreignKey: "colegiadoProfesional"});
-  profesionales.hasMany(titulo_profesional, { as: "titulo_profesionals", foreignKey: "colegiadoProfesional"});
-  usuario.belongsTo(profesionales, { as: "colegiadoProfesional_profesionale", foreignKey: "colegiadoProfesional"});
-  profesionales.hasMany(usuario, { as: "usuarios", foreignKey: "colegiadoProfesional"});
-  evento.belongsTo(tipos_eventos, { as: "idTipoEvento_tipos_evento", foreignKey: "idTipoEvento"});
-  tipos_eventos.hasMany(evento, { as: "eventos", foreignKey: "idTipoEvento"});
-  evento.belongsTo(usuario, { as: "pacienteDni_usuario", foreignKey: "pacienteDni"});
-  usuario.hasMany(evento, { as: "eventos", foreignKey: "pacienteDni"});
-  historial_clinico.belongsTo(usuario, { as: "pacienteDni_usuario", foreignKey: "pacienteDni"});
-  usuario.hasMany(historial_clinico, { as: "historial_clinicos", foreignKey: "pacienteDni"});
-  mensaje.belongsTo(usuario, { as: "dniUsuarioRemitente_usuario", foreignKey: "dniUsuarioRemitente"});
-  usuario.hasMany(mensaje, { as: "mensajes", foreignKey: "dniUsuarioRemitente"});
-  mensaje.belongsTo(usuario, { as: "dniUsuarioReceptor_usuario", foreignKey: "dniUsuarioReceptor"});
-  usuario.hasMany(mensaje, { as: "dniUsuarioReceptor_mensajes", foreignKey: "dniUsuarioReceptor"});
+  titulos_profesional.belongsTo(profesionales, { as: "colegiadoProfesional_profesionale", foreignKey: "colegiadoProfesional"});
+  profesionales.hasMany(titulos_profesional, { as: "titulos_profesionals", foreignKey: "colegiadoProfesional"});
+  usuarios.belongsTo(profesionales, { as: "colegiadoProfesional_profesionale", foreignKey: "colegiadoProfesional"});
+  profesionales.hasMany(usuarios, { as: "usuarios", foreignKey: "colegiadoProfesional"});
+  eventos.belongsTo(tipos_eventos, { as: "idTipoEvento_tipos_evento", foreignKey: "idTipoEvento"});
+  tipos_eventos.hasMany(eventos, { as: "eventos", foreignKey: "idTipoEvento"});
+  usuarios.belongsTo(tipos_usuario, { as: "idTipoUsuario_tipos_usuario", foreignKey: "idTipoUsuario"});
+  tipos_usuario.hasMany(usuarios, { as: "usuarios", foreignKey: "idTipoUsuario"});
+  eventos.belongsTo(usuarios, { as: "pacienteDni_usuario", foreignKey: "pacienteDni"});
+  usuarios.hasMany(eventos, { as: "eventos", foreignKey: "pacienteDni"});
+  historiales_clinicos.belongsTo(usuarios, { as: "pacienteDni_usuario", foreignKey: "pacienteDni"});
+  usuarios.hasMany(historiales_clinicos, { as: "historiales_clinicos", foreignKey: "pacienteDni"});
 
   return {
-    agenda,
-    ciudad,
-    clinica,
-    especialidades,
-    estado,
+    agendas,
+    ciudades,
+    clinicas,
+    estados,
     estados_eventos,
-    evento,
-    factura,
-    historial_clinico,
+    eventos,
+    facturas,
+    historiales_clinicos,
     horarios_disponibles,
     idiomas,
     mediciones,
-    mensaje,
     notas,
     notas_mediciones,
     opciones_mediciones,
-    pais,
+    paises,
     profesional_especialidades,
     profesional_idiomas,
     profesionales,
     tipos_eventos,
-    titulo_profesional,
-    usuario,
+    tipos_usuario,
+    titulos_profesional,
+    usuarios,
   };
 }
 module.exports = initModels;

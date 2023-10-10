@@ -1,14 +1,18 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('factura', {
-    idfactura: {
+  return sequelize.define('paises', {
+    idPais: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    monto: {
-      type: DataTypes.DECIMAL(10,0),
+    nombre: {
+      type: DataTypes.STRING(45),
+      allowNull: false
+    },
+    urlBandera: {
+      type: DataTypes.STRING(180),
       allowNull: false
     },
     estado: {
@@ -16,24 +20,16 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     fechaCreacion: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false
     },
     fechaActualizacion: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: true
-    },
-    idEvento: {
-      type: DataTypes.BIGINT,
-      allowNull: false,
-      references: {
-        model: 'evento',
-        key: 'idEvento'
-      }
     }
   }, {
     sequelize,
-    tableName: 'factura',
+    tableName: 'paises',
     timestamps: false,
     indexes: [
       {
@@ -41,14 +37,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "idfactura" },
-        ]
-      },
-      {
-        name: "fk_factura_evento1_idx",
-        using: "BTREE",
-        fields: [
-          { name: "idEvento" },
+          { name: "idPais" },
         ]
       },
     ]

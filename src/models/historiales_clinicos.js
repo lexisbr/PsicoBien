@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('historial_clinico', {
+  return sequelize.define('historiales_clinicos', {
     idHistorialClinico: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -22,7 +22,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.BIGINT,
       allowNull: false,
       references: {
-        model: 'usuario',
+        model: 'usuarios',
         key: 'dni'
       }
     },
@@ -36,7 +36,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'historial_clinico',
+    tableName: 'historiales_clinicos',
     timestamps: false,
     indexes: [
       {

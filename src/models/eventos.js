@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('evento', {
+  return sequelize.define('eventos', {
     idEvento: {
       type: DataTypes.BIGINT,
       allowNull: false,
@@ -34,7 +34,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'agenda',
+        model: 'agendas',
         key: 'idAgenda'
       }
     },
@@ -62,13 +62,13 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.BIGINT,
       allowNull: true,
       references: {
-        model: 'usuario',
+        model: 'usuarios',
         key: 'dni'
       }
     }
   }, {
     sequelize,
-    tableName: 'evento',
+    tableName: 'eventos',
     timestamps: false,
     indexes: [
       {

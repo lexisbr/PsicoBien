@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('ciudad', {
-    idCiudad: {
+  return sequelize.define('estados', {
+    idEstado: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -11,12 +11,12 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(45),
       allowNull: false
     },
-    idEstado: {
+    idPais: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'estado',
-        key: 'idEstado'
+        model: 'paises',
+        key: 'idPais'
       }
     },
     estado: {
@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'ciudad',
+    tableName: 'estados',
     timestamps: false,
     indexes: [
       {
@@ -41,14 +41,14 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "idCiudad" },
+          { name: "idEstado" },
         ]
       },
       {
-        name: "fk_ciudad_estado1_idx",
+        name: "fk_estado_pais_idx",
         using: "BTREE",
         fields: [
-          { name: "idEstado" },
+          { name: "idPais" },
         ]
       },
     ]

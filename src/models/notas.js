@@ -15,7 +15,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'historial_clinico',
+        model: 'historiales_clinicos',
         key: 'idHistorialClinico'
       }
     },
@@ -23,7 +23,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.BIGINT,
       allowNull: false,
       references: {
-        model: 'evento',
+        model: 'eventos',
         key: 'idEvento'
       }
     },

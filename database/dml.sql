@@ -18,7 +18,8 @@ VALUES ('Quetzaltenango', 1, 1, utc_timestamp());
 INSERT INTO estado (nombre, idPais, estado, fechaCreacion)
 VALUES ('Totonicapan', 1, 1, utc_timestamp());
 
-
+INSERT INTO ciudad (nombre, idEstado, estado, fechaCreacion)
+VALUES ('Quetzaltenango', 1, 1, utc_timestamp());
 
 
 
@@ -32,8 +33,12 @@ INSERT INTO usuario (
     genero,
     telefono,
     email,
+    password,
     tipoUsuario,
+    idCiudad,
     estado,
     fechaCreacion
 )
-VALUES (12345678910,"Alejandro","Barrios","2000-05-02", "M", "38164333", "email@mail.com","Paciente",1,utc_timestamp());
+VALUES (12345678910,"Alejandro","Barrios","2000-05-02", "M", "38164333", "email@mail.com","123","Paciente",1,1,utc_timestamp());
+
+SELECT * FROM usuario;

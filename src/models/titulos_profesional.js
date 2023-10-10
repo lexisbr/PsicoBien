@@ -1,42 +1,30 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('paciente', {
-    dni: {
-      type: DataTypes.BIGINT,
+  return sequelize.define('titulos_profesional', {
+    idTituloProfesional: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    nombre: {
+    descripcion: {
       type: DataTypes.STRING(90),
       allowNull: false
     },
-    apellido: {
+    institucion: {
       type: DataTypes.STRING(90),
       allowNull: false
     },
-    fechaNacimiento: {
-      type: DataTypes.STRING(45),
+    fechaAdquisicion: {
+      type: DataTypes.DATEONLY,
       allowNull: false
     },
-    genero: {
-      type: DataTypes.STRING(1),
-      allowNull: false
-    },
-    telefono: {
-      type: DataTypes.STRING(45),
-      allowNull: false
-    },
-    email: {
-      type: DataTypes.STRING(90),
-      allowNull: false
-    },
-    direccion: {
+    colegiadoProfesional: {
       type: DataTypes.STRING(180),
-      allowNull: false
-    },
-    url_foto: {
-      type: DataTypes.STRING(180),
-      allowNull: true
+      allowNull: false,
+      references: {
+        model: 'profesionales',
+        key: 'colegiado'
+      }
     },
     estado: {
       type: DataTypes.BOOLEAN,
@@ -52,7 +40,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'paciente',
+    tableName: 'titulos_profesional',
     timestamps: false,
     indexes: [
       {
@@ -60,7 +48,14 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "dni" },
+          { name: "idTituloProfesional" },
+        ]
+      },
+      {
+        name: "fk_titulo_profesional_profesionales1_idx",
+        using: "BTREE",
+        fields: [
+          { name: "colegiadoProfesional" },
         ]
       },
     ]

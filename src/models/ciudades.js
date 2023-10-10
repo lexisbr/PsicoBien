@@ -1,34 +1,39 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('especialidades', {
-    idEspecialidad: {
+  return sequelize.define('ciudades', {
+    idCiudad: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    especialidad: {
-      type: DataTypes.STRING(90),
+    nombre: {
+      type: DataTypes.STRING(45),
       allowNull: false
+    },
+    idEstado: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'estados',
+        key: 'idEstado'
+      }
     },
     estado: {
       type: DataTypes.BOOLEAN,
       allowNull: false
     },
     fechaCreacion: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: false
     },
     fechaActualizacion: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       allowNull: true
-    },
-    esModeloTerapeutico: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'especialidades',
+    tableName: 'ciudades',
     timestamps: false,
     indexes: [
       {
@@ -36,7 +41,14 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "idEspecialidad" },
+          { name: "idCiudad" },
+        ]
+      },
+      {
+        name: "fk_ciudad_estado1_idx",
+        using: "BTREE",
+        fields: [
+          { name: "idEstado" },
         ]
       },
     ]

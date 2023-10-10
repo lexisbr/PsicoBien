@@ -1,23 +1,23 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('profesional_especialidades', {
+    idProfesionalEspecialidad: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     colegiadoProfesional: {
       type: DataTypes.STRING(180),
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'profesionales',
         key: 'colegiado'
       }
     },
-    idEspecialidad: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'especialidades',
-        key: 'idEspecialidad'
-      }
+    especialidad: {
+      type: DataTypes.STRING(90),
+      allowNull: false
     },
     estado: {
       type: DataTypes.BOOLEAN,
@@ -41,15 +41,7 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "colegiadoProfesional" },
-          { name: "idEspecialidad" },
-        ]
-      },
-      {
-        name: "fk_profesional_especialidades_especialidades1_idx",
-        using: "BTREE",
-        fields: [
-          { name: "idEspecialidad" },
+          { name: "idProfesionalEspecialidad" },
         ]
       },
       {

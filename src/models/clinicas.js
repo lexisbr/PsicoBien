@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('clinica', {
+  return sequelize.define('clinicas', {
     idClinica: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -39,7 +39,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'ciudad',
+        model: 'ciudades',
         key: 'idCiudad'
       }
     },
@@ -69,7 +69,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'clinica',
+    tableName: 'clinicas',
     timestamps: false,
     indexes: [
       {

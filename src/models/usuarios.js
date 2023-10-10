@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('usuario', {
+  return sequelize.define('usuarios', {
     dni: {
       type: DataTypes.BIGINT,
       allowNull: false,
@@ -47,10 +47,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(45),
       allowNull: true
     },
-    tipoUsuario: {
-      type: DataTypes.ENUM('Paciente','Profesional'),
-      allowNull: false
-    },
     estado: {
       type: DataTypes.BOOLEAN,
       allowNull: false
@@ -67,7 +63,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'ciudad',
+        model: 'ciudades',
         key: 'idCiudad'
       }
     },
@@ -78,10 +74,18 @@ module.exports = function(sequelize, DataTypes) {
         model: 'profesionales',
         key: 'colegiado'
       }
+    },
+    idTipoUsuario: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'tipos_usuario',
+        key: 'idTipoUsuario'
+      }
     }
   }, {
     sequelize,
-    tableName: 'usuario',
+    tableName: 'usuarios',
     timestamps: false,
     indexes: [
       {
@@ -112,6 +116,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "colegiadoProfesional" },
+        ]
+      },
+      {
+        name: "fk_usuario_tipo_usuario1_idx",
+        using: "BTREE",
+        fields: [
+          { name: "idTipoUsuario" },
         ]
       },
     ]

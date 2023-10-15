@@ -14,7 +14,7 @@ exports.createProfessionalRequest = async (req, res) => {
     if (existingProfessional) {
       return res
         .status(400)
-        .json({ message: "Numero de colegiado ya utilizado" });
+        .json({ message: "Número de colegiado ya utilizado" });
     }
 
     const professional = new Profesionales({

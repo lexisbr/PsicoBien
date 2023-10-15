@@ -5,34 +5,34 @@ const Usuarios = db.usuario;
 
 module.exports = {
 
-    validateLogin(req, res){
+    validateLogin(req, res) {
         Usuarios.findOne({
             where: {
                 email: req.body.email
             }
         }).then(usuario => {
-            if(!usuario){
-                return res.status(404).send({message: "Usuario no encontrado"});
+            if (!usuario) {
+                return res.status(404).send({ message: "Usuario no encontrado" });
             }
-            if(usuario.password !== req.body.password){
-                return res.status(401).send({message: "Contraseña incorrecta"});
+            if (usuario.password !== req.body.password) {
+                return res.status(401).send({ message: "Contraseña incorrecta" });
             }
             return res.status(200).send(usuario);
         }).catch(err => {
-            return res.status(500).send({message: err.message});
+            return res.status(500).send({ message: err.message });
         });
     },
 
-    async registrar(req, res)  {
+    async registrar(req, res) {
 
         const usuario = await Usuarios.findOne({
             where: {
-               [Op.or]: [{email: req.body.email}, {dni: req.body.dni}]
+                [Op.or]: [{ email: req.body.email }, { dni: req.body.dni }]
             }
         });
 
-        if(usuario){
-            return res.status(409).send({message: "El usuario ya existe"});
+        if (usuario) {
+            return res.status(409).send({ message: "El usuario ya existe" });
         }
 
         Usuarios.create({
@@ -51,7 +51,7 @@ module.exports = {
         }).then(usuario => {
             return res.status(200).send(usuario);
         }).catch(err => {
-            return res.status(500).send({message: err.message});
+            return res.status(500).send({ message: err.message });
         });
     }
 }

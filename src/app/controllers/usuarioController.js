@@ -1,7 +1,7 @@
 "use strict";
 const db = require("../../models");
 const { Op } = require("sequelize");
-const Usuarios = db.usuario;
+const Usuarios = db.usuarios;
 
 module.exports = {
 
@@ -24,7 +24,7 @@ module.exports = {
     },
 
     async registrar(req, res)  {
-
+        console.log(req.body);
         const usuario = await Usuarios.findOne({
             where: {
                [Op.or]: [{email: req.body.email}, {dni: req.body.dni}]
@@ -44,7 +44,7 @@ module.exports = {
             telefono: req.body.telefono,
             email: req.body.email,
             password: req.body.password,
-            tipoUsuario: req.body.tipoUsuario,
+            idTipoUsuario: req.body.idTipoUsuario,
             idCiudad: req.body.idCiudad,
             estado: 1,
             fechaCreacion: new Date(),

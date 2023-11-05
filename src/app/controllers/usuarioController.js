@@ -1,7 +1,7 @@
 "use strict";
 const db = require("../../models");
 const { Op } = require("sequelize");
-const Usuarios = db.usuario;
+const Usuarios = db.usuarios;
 
 module.exports = {
 
@@ -19,6 +19,7 @@ module.exports = {
             }
             return res.status(200).send(usuario);
         }).catch(err => {
+            console.log(err)
             return res.status(500).send({ message: err.message });
         });
     },
@@ -39,19 +40,38 @@ module.exports = {
             dni: req.body.dni,
             nombre: req.body.nombre,
             apellido: req.body.apellido,
+            email: req.body.email,
             fechaNacimiento: req.body.fechaNacimiento,
             genero: req.body.genero,
             telefono: req.body.telefono,
-            email: req.body.email,
             password: req.body.password,
-            tipoUsuario: req.body.tipoUsuario,
+            idTipoUsuario: req.body.idTipoUsuario,
             idCiudad: req.body.idCiudad,
             estado: 1,
             fechaCreacion: new Date(),
         }).then(usuario => {
             return res.status(200).send(usuario);
         }).catch(err => {
+            console.log(err)
             return res.status(500).send({ message: err.message });
         });
+    },
+    find(req, res) {
+        return Usuarios.findAll()
+            .then(usuario => res.status(200).send(usuario))
+            .catch(error => res.status(400).send(error))
+    },
+    findId(req, res) {
+        const DNI = req.params.id;
+        Usuarios.findByPk(DNI)
+            .then(usuario => {
+                if (!usuario) {
+                    return res.status(404).send({ error: 'Tipo de cliente no encontrado candy manca' });
+                } 
+                else {
+                    return res.status(200).send(usuario);
+                }
+            })
+            .catch(error => res.status(400).send({ error: 'Error al realizar la consulta' }));
     }
 }

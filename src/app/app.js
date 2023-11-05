@@ -1,9 +1,13 @@
 const express = require("express");
 const logger = require("morgan");
+const cors = require("cors");
+
+
 const http = require("http");
 const app = express();
-const PORT = 3000;
 
+const PORT = 3000;
+app.use(cors());
 app.set("port", PORT);
 app.use(logger("dev"));
 app.use(express.json({ limit: "50mb" }));

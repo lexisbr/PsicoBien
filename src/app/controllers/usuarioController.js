@@ -24,8 +24,8 @@ module.exports = {
         });
     },
 
-    async registrar(req, res) {
-
+    async registrar(req, res)  {
+        console.log(req.body);
         const usuario = await Usuarios.findOne({
             where: {
                 [Op.or]: [{ email: req.body.email }, { dni: req.body.dni }]

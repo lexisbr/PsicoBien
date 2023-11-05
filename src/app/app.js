@@ -1,7 +1,5 @@
 const express = require("express");
 const logger = require("morgan");
-const cors = require("cors");
-
 
 const http = require("http");
 const cors = require("cors"); // Import cors module

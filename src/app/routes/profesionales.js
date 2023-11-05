@@ -38,4 +38,6 @@ router.post(
   profesionalController.createProfessionalRequest
 );
 
+router.post("/buscar", profesionalController.buscarProfesional);
+
 module.exports = router;

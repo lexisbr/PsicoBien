@@ -1,10 +1,14 @@
 const express = require("express");
 const logger = require("morgan");
+const cors = require("cors");
+
+
 const http = require("http");
 const cors = require("cors"); // Import cors module
 const app = express();
-const PORT = 3000;
 
+const PORT = 3000;
+app.use(cors());
 app.set("port", PORT);
 app.use(logger("dev"));
 app.use(cors()); // Use cors middleware

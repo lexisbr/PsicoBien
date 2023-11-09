@@ -24,9 +24,9 @@ USE `psicobien` ;
 CREATE TABLE IF NOT EXISTS `psicobien`.`profesionales` (
   `colegiado` VARCHAR(180) NOT NULL,
   `descripcion` VARCHAR(360) NULL,
-  `precioPorHora` DECIMAL NOT NULL,
-  UNIQUE INDEX `colegiado_UNIQUE` (`colegiado` ASC) VISIBLE,
-  PRIMARY KEY (`colegiado`))
+  `precioPorHora` DECIMAL(10, 2) NOT NULL,
+  PRIMARY KEY (`colegiado`),
+  UNIQUE INDEX `colegiado_UNIQUE` (`colegiado` ASC))
 ENGINE = InnoDB;
 
 
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`profesional_especialidades` (
   `fechaCreacion` DATE NOT NULL,
   `fechaActualizacion` DATE NULL,
   PRIMARY KEY (`idProfesionalEspecialidad`),
-  INDEX `fk_profesional_especialidades_profesionales1_idx` (`colegiadoProfesional` ASC) VISIBLE,
+  INDEX `fk_profesional_especialidades_profesionales1_idx` (`colegiadoProfesional` ASC) ,
   CONSTRAINT `fk_profesional_especialidades_profesionales1`
     FOREIGN KEY (`colegiadoProfesional`)
     REFERENCES `psicobien`.`profesionales` (`colegiado`)
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`estados` (
   `fechaCreacion` DATETIME NOT NULL,
   `fechaActualizacion` DATETIME NULL,
   PRIMARY KEY (`idEstado`),
-  INDEX `fk_estado_pais_idx` (`idPais` ASC) VISIBLE,
+  INDEX `fk_estado_pais_idx` (`idPais` ASC) ,
   CONSTRAINT `fk_estado_pais`
     FOREIGN KEY (`idPais`)
     REFERENCES `psicobien`.`paises` (`idPais`)
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`ciudades` (
   `fechaCreacion` DATETIME NOT NULL,
   `fechaActualizacion` DATETIME NULL,
   PRIMARY KEY (`idCiudad`),
-  INDEX `fk_ciudad_estado1_idx` (`idEstado` ASC) VISIBLE,
+  INDEX `fk_ciudad_estado1_idx` (`idEstado` ASC) ,
   CONSTRAINT `fk_ciudad_estado1`
     FOREIGN KEY (`idEstado`)
     REFERENCES `psicobien`.`estados` (`idEstado`)
@@ -123,8 +123,8 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`clinicas` (
   `fechaCreacion` DATETIME NOT NULL,
   `fechaActualizacion` DATETIME NULL,
   PRIMARY KEY (`idClinica`),
-  INDEX `fk_clinica_ciudad1_idx` (`idCiudad` ASC) VISIBLE,
-  INDEX `fk_clinica_profesionales1_idx` (`colegiadoProfesional` ASC) VISIBLE,
+  INDEX `fk_clinica_ciudad1_idx` (`idCiudad` ASC) ,
+  INDEX `fk_clinica_profesionales1_idx` (`colegiadoProfesional` ASC) ,
   CONSTRAINT `fk_clinica_ciudad1`
     FOREIGN KEY (`idCiudad`)
     REFERENCES `psicobien`.`ciudades` (`idCiudad`)
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`titulos_profesional` (
   `fechaCreacion` DATE NOT NULL,
   `fechaActualizacion` DATE NULL,
   PRIMARY KEY (`idTituloProfesional`),
-  INDEX `fk_titulo_profesional_profesionales1_idx` (`colegiadoProfesional` ASC) VISIBLE,
+  INDEX `fk_titulo_profesional_profesionales1_idx` (`colegiadoProfesional` ASC) ,
   CONSTRAINT `fk_titulo_profesional_profesionales1`
     FOREIGN KEY (`colegiadoProfesional`)
     REFERENCES `psicobien`.`profesionales` (`colegiado`)
@@ -164,7 +164,7 @@ ENGINE = InnoDB;
 -- Table `psicobien`.`idiomas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `psicobien`.`idiomas` (
-  `idIdiomas` INT NOT NULL,
+  `idIdiomas` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
   `estado` TINYINT(1) NOT NULL,
   `fechaCreacion` DATE NOT NULL,
@@ -177,13 +177,13 @@ ENGINE = InnoDB;
 -- Table `psicobien`.`profesional_idiomas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `psicobien`.`profesional_idiomas` (
+  `idProfesionalIdiomas` INT PRIMARY KEY AUTO_INCREMENT,
   `idIdioma` INT NOT NULL,
   `estado` TINYINT(1) NOT NULL,
   `fechaCreacion` DATE NOT NULL,
   `fechaActualizacion` DATE NULL,
   `colegiadoProfesional` VARCHAR(180) NOT NULL,
-  PRIMARY KEY (`idIdioma`),
-  INDEX `fk_profesional_idiomas_profesionales1_idx` (`colegiadoProfesional` ASC) VISIBLE,
+  INDEX `fk_profesional_idiomas_profesionales1_idx` (`colegiadoProfesional` ASC) ,
   CONSTRAINT `fk_profesional_idiomas_idiomas1`
     FOREIGN KEY (`idIdioma`)
     REFERENCES `psicobien`.`idiomas` (`idIdiomas`)
@@ -220,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`agendas` (
   `fechaCreacion` DATE NOT NULL,
   `fechaActualizacion` DATE NULL,
   PRIMARY KEY (`idAgenda`),
-  INDEX `fk_agenda_profesionales1_idx` (`colegiadoProfesional` ASC) VISIBLE,
+  INDEX `fk_agenda_profesionales1_idx` (`colegiadoProfesional` ASC) ,
   CONSTRAINT `fk_agenda_profesionales1`
     FOREIGN KEY (`colegiadoProfesional`)
     REFERENCES `psicobien`.`profesionales` (`colegiado`)
@@ -255,6 +255,9 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`tipos_usuario` (
 ENGINE = InnoDB;
 
 
+
+
+
 -- -----------------------------------------------------
 -- Table `psicobien`.`usuarios`
 -- -----------------------------------------------------
@@ -273,17 +276,17 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`usuarios` (
   `estado` TINYINT(1) NOT NULL,
   `fechaCreacion` DATETIME NOT NULL,
   `fechaActualizacion` DATETIME NULL,
-  `idCiudad` INT NOT NULL,
+  `idPais` INT NOT NULL,
   `colegiadoProfesional` VARCHAR(180) NULL,
   `idTipoUsuario` INT NOT NULL,
   PRIMARY KEY (`dni`),
-  INDEX `fk_usuario_ciudad1_idx` (`idCiudad` ASC) VISIBLE,
-  INDEX `fk_usuario_profesionales1_idx` (`colegiadoProfesional` ASC) VISIBLE,
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
-  INDEX `fk_usuario_tipo_usuario1_idx` (`idTipoUsuario` ASC) VISIBLE,
-  CONSTRAINT `fk_usuario_ciudad1`
-    FOREIGN KEY (`idCiudad`)
-    REFERENCES `psicobien`.`ciudades` (`idCiudad`)
+  INDEX `fk_usuario_pais1_idx` (`idPais` ASC) ,
+  INDEX `fk_usuario_profesionales1_idx` (`colegiadoProfesional` ASC) ,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) ,
+  INDEX `fk_usuario_tipo_usuario1_idx` (`idTipoUsuario` ASC) ,
+  CONSTRAINT `fk_usuario_pais1`
+    FOREIGN KEY (`idPais`)
+    REFERENCES `psicobien`.`paises` (`idPais`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_usuario_profesionales1`
@@ -316,10 +319,10 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`eventos` (
   `fechaActualizacion` DATE NULL,
   `pacienteDni` BIGINT NULL,
   PRIMARY KEY (`idEvento`),
-  INDEX `fk_eventos_estados_eventos1_idx` (`idEstadosEventos` ASC) VISIBLE,
-  INDEX `fk_eventos_agenda1_idx` (`idAgenda` ASC) VISIBLE,
-  INDEX `fk_eventos_tipos_eventos1_idx` (`idTipoEvento` ASC) VISIBLE,
-  INDEX `fk_evento_usuario1_idx` (`pacienteDni` ASC) VISIBLE,
+  INDEX `fk_eventos_estados_eventos1_idx` (`idEstadosEventos` ASC) ,
+  INDEX `fk_eventos_agenda1_idx` (`idAgenda` ASC) ,
+  INDEX `fk_eventos_tipos_eventos1_idx` (`idTipoEvento` ASC) ,
+  INDEX `fk_evento_usuario1_idx` (`pacienteDni` ASC) ,
   CONSTRAINT `fk_eventos_estados_eventos1`
     FOREIGN KEY (`idEstadosEventos`)
     REFERENCES `psicobien`.`estados_eventos` (`idEstadosEventos`)
@@ -355,7 +358,7 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`horarios_disponibles` (
   `fechaCreacion` DATE NOT NULL,
   `fechaActualizacion` DATE NULL,
   PRIMARY KEY (`idHorariosDisponibles`),
-  INDEX `fk_horarios_disponibles_clinica1_idx` (`idClinica` ASC) VISIBLE,
+  INDEX `fk_horarios_disponibles_clinica1_idx` (`idClinica` ASC) ,
   CONSTRAINT `fk_horarios_disponibles_clinica1`
     FOREIGN KEY (`idClinica`)
     REFERENCES `psicobien`.`clinicas` (`idClinica`)
@@ -375,8 +378,8 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`historiales_clinicos` (
   `pacienteDni` BIGINT NOT NULL,
   `colegiadoProfesional` VARCHAR(180) NOT NULL,
   PRIMARY KEY (`idHistorialClinico`),
-  INDEX `fk_historial_clinico_usuario1_idx` (`pacienteDni` ASC) VISIBLE,
-  INDEX `fk_historial_clinico_profesionales1_idx` (`colegiadoProfesional` ASC) VISIBLE,
+  INDEX `fk_historial_clinico_usuario1_idx` (`pacienteDni` ASC) ,
+  INDEX `fk_historial_clinico_profesionales1_idx` (`colegiadoProfesional` ASC) ,
   CONSTRAINT `fk_historial_clinico_usuario1`
     FOREIGN KEY (`pacienteDni`)
     REFERENCES `psicobien`.`usuarios` (`dni`)
@@ -402,8 +405,8 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`notas` (
   `fechaCreacion` DATE NOT NULL,
   `fechaActualizacion` DATE NULL,
   PRIMARY KEY (`idNota`),
-  INDEX `fk_notas_historial_clinico1_idx` (`idHistorialClinico` ASC) VISIBLE,
-  INDEX `fk_notas_eventos1_idx` (`idEvento` ASC) VISIBLE,
+  INDEX `fk_notas_historial_clinico1_idx` (`idHistorialClinico` ASC) ,
+  INDEX `fk_notas_eventos1_idx` (`idEvento` ASC) ,
   CONSTRAINT `fk_notas_historial_clinico1`
     FOREIGN KEY (`idHistorialClinico`)
     REFERENCES `psicobien`.`historiales_clinicos` (`idHistorialClinico`)
@@ -441,14 +444,13 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`opciones_mediciones` (
   `fechaCreacion` DATE NOT NULL,
   `fechaActualizacion` DATE NULL,
   PRIMARY KEY (`idOpcionesMediciones`),
-  INDEX `fk_opciones_mediciones_mediciones1_idx` (`idMedicion` ASC) VISIBLE,
+  INDEX `fk_opciones_mediciones_mediciones1_idx` (`idMedicion` ASC) ,
   CONSTRAINT `fk_opciones_mediciones_mediciones1`
     FOREIGN KEY (`idMedicion`)
     REFERENCES `psicobien`.`mediciones` (`idMedicion`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `psicobien`.`notas_mediciones`
@@ -461,8 +463,8 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`notas_mediciones` (
   `fechaCreacion` DATE NOT NULL,
   `fechaActualizacion` DATE NULL,
   PRIMARY KEY (`idNota`, `idMedicion`),
-  INDEX `fk_notas_mediciones_mediciones1_idx` (`idMedicion` ASC) VISIBLE,
-  INDEX `fk_notas_mediciones_opciones_mediciones1_idx` (`idOpcionSeleccionada` ASC) VISIBLE,
+  INDEX `fk_notas_mediciones_mediciones1_idx` (`idMedicion` ASC) ,
+  INDEX `fk_notas_mediciones_opciones_mediciones1_idx` (`idOpcionSeleccionada` ASC) ,
   CONSTRAINT `fk_notas_mediciones_notas1`
     FOREIGN KEY (`idNota`)
     REFERENCES `psicobien`.`notas` (`idNota`)
@@ -480,7 +482,6 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`notas_mediciones` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
 -- Table `psicobien`.`facturas`
 -- -----------------------------------------------------
@@ -492,7 +493,7 @@ CREATE TABLE IF NOT EXISTS `psicobien`.`facturas` (
   `fechaActualizacion` DATE NULL,
   `idEvento` BIGINT NOT NULL,
   PRIMARY KEY (`idfactura`),
-  INDEX `fk_factura_evento1_idx` (`idEvento` ASC) VISIBLE,
+  INDEX `fk_factura_evento1_idx` (`idEvento` ASC) ,
   CONSTRAINT `fk_factura_evento1`
     FOREIGN KEY (`idEvento`)
     REFERENCES `psicobien`.`eventos` (`idEvento`)

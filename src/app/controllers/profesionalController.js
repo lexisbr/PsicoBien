@@ -43,11 +43,15 @@ module.exports = {
   },
   async buscarProfesional(req, res) {
     try {
-      const { nombreCompleto, especialidades, idPais } = req.body;
-
+      const { nombreCompleto, especialidades, idEstado } = req.body;
+      console.log(especialidades);
+      
       const profesionales = await db.sequelize.query(
-        `CALL buscarProfesional("${nombreCompleto.trim()}", ${idPais}, "${especialidades}")`
+        `CALL buscarProfesional("${nombreCompleto?.trim()}", ${idEstado}, "${especialidades}")`
       );
+      profesionales.forEach((profesional) => {
+        profesional.especialidades = profesional.especialidades.split(",");
+      });
       return res.status(200).json(profesionales);
     } catch (error) {
       console.error(error);

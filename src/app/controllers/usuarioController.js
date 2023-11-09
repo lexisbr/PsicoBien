@@ -1,8 +1,9 @@
 "use strict";
 const db = require("../../models");
 const { Op } = require("sequelize");
+const profesional_idiomas = require("../../models/profesional_idiomas");
 const Usuarios = db.usuarios;
-
+const ProfesionalesIdiomas = db.profesional_idiomas;
 module.exports = {
 
     validateLogin(req, res) {
@@ -73,5 +74,118 @@ module.exports = {
                 }
             })
             .catch(error => res.status(400).send({ error: 'Error al realizar la consulta' }));
+    },
+    updateFotoPerfil(req, res){
+        const update = req.body;
+        Usuarios.update({
+            urlFotoPerfil: update.urlFotoPerfil
+        }), {where: {dni :update.dni}}
+        .then(urlPerfil => {
+            if (urlPerfil[0] === 0) {
+                return res.status(200).send({error: 'No se encontró ningún registro'});
+            }
+            else{
+                return res.status(200).send('El registro ha sido actualizado');
+            }
+        })
+        .catch(error => {
+            console.log(error)
+            return res.status(500).send({ error: 'Error al actualizar' });
+        });
     }
+    ,
+    async buscarEspecialidad(req, res) {
+        try {
+            const { dni } = req.params;
+
+            const especialidades = await db.sequelize.query(
+                `CALL EspecialidadesProfesional("${dni}")`
+            );
+            return res.status(200).json(especialidades);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Server error" });
+        }
+    },
+    async agregarIdioma(req, res) {
+        const idIdioma = req.body.idIdioma;
+        const estado = true;
+        const fechaCreacion= new Date();
+        const fechaFormateada = fechaCreacion.toISOString().split('T')[0];
+        const colegiadoProfesional= req.body.colegiadoProfesional;
+        try {
+            
+            const usuarios = await db.sequelize.query(
+                `INSERT INTO profesional_idiomas (idIdioma, estado, fechaCreacion, colegiadoProfesional) values ( ${idIdioma}, ${estado}, ${fechaFormateada}, ${colegiadoProfesional})`,
+                {
+                    replacements: [idIdioma, colegiadoProfesional],
+                    type: db.Sequelize.QueryTypes.INSERT,
+                }
+            );
+
+            await res.status(200).json({idIdioma,colegiadoProfesional})
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Server error' }); 
+        }
+    },
+    async borrarIdioma(req, res) {
+        try {
+            const { idProfesionalIdiomas } = req.params;
+
+            const usuarios = await db.sequelize.query(
+                'DELETE FROM profesional_idiomas WHERE idProfesionalIdiomas = ? ',
+                {
+                    replacements: [idProfesionalIdiomas],
+                    type: db.Sequelize.QueryTypes.UPDATE,
+                }
+            );
+            return res.status(200).json(usuarios);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Server error" });
+        }
+    },
+    async agregarEspecialidad(req, res) {
+        const especialidad = req.body.especialidad;
+        const estado = true;
+        const fechaCreacion= new Date();
+        const fechaFormateada = fechaCreacion.toISOString().split('T')[0];
+        const colegiadoProfesional= req.body.colegiadoProfesional;
+        try {
+            
+            const usuarios = await db.sequelize.query(
+                `INSERT INTO profesional_especialidades (colegiadoProfesional, especialidad, estado, fechaCreacion) values ( ?,?, ${estado}, ${fechaFormateada})`,
+                {
+                    replacements: [ colegiadoProfesional,especialidad],
+                    type: db.Sequelize.QueryTypes.INSERT,
+                }
+            );
+
+            await res.status(200).json({colegiadoProfesional})
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Server error' }); 
+        }
+    },
+    async borrarEspecialidad(req, res) {
+        try {
+            const { idProfesionalEspecialidad } = req.params;
+
+            const usuarios = await db.sequelize.query(
+                'DELETE FROM profesional_especialidades WHERE idProfesionalEspecialidad = ?',
+                {
+                    replacements: [idProfesionalEspecialidad],
+                    type: db.Sequelize.QueryTypes.UPDATE,
+                }
+            );
+            return res.status(200).json(usuarios);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Server error" });
+        }
+    },
+
 }

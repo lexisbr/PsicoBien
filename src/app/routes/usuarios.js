@@ -8,9 +8,16 @@ router.post("/registrar", usuarioController.registrar);
 router.get("/users",usuarioController.find)
 router.get("/users/:id",usuarioController.findId);
 router.get("/userEspecialidad/:dni",usuarioController.buscarEspecialidad);
+
+router.get("/clinicas/:colegiado", usuarioController.buscarClinicas);
+
 router.post("/agregarIdioma",usuarioController.agregarIdioma);
 router.delete("/deleteIdioma/:idProfesionalIdiomas",usuarioController.borrarIdioma)
 
 router.post("/agregarEspecialidad",usuarioController.agregarEspecialidad);
 router.delete("/deleteEspecialidad/:idProfesionalEspecialidad",usuarioController.borrarEspecialidad)
+
+router.delete("/deleteClinica/:idClinica",usuarioController.borrarClinica)
+
+
 module.exports = router; 

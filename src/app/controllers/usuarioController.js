@@ -94,6 +94,19 @@ module.exports = {
         });
     }
     ,
+    async buscarClinicas(req, res){
+        try {
+            const { colegiado } = req.params;
+
+            const clinicas = await db.sequelize.query(
+                `CALL buscarClinicas("${colegiado}")`
+            );
+            return res.status(200).json(clinicas);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Server error" });
+        }
+    },
     async buscarEspecialidad(req, res) {
         try {
             const { dni } = req.params;
@@ -178,6 +191,23 @@ module.exports = {
                 'DELETE FROM profesional_especialidades WHERE idProfesionalEspecialidad = ?',
                 {
                     replacements: [idProfesionalEspecialidad],
+                    type: db.Sequelize.QueryTypes.UPDATE,
+                }
+            );
+            return res.status(200).json(usuarios);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Server error" });
+        }
+    },
+    async borrarClinica(req, res) {
+        try {
+            const { idClinica } = req.params;
+
+            const usuarios = await db.sequelize.query(
+                'DELETE FROM clinicas WHERE idClinica = ?',
+                {
+                    replacements: [idClinica],
                     type: db.Sequelize.QueryTypes.UPDATE,
                 }
             );

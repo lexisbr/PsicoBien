@@ -13,6 +13,16 @@ exports.getCountries = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+exports.getCountriesId = async (req, res) => {
+    const { idPais } = req.params;
+    try {
+        const countries = await Paises.findAll({where:  { idPais }}); 
+        res.status(200).json(countries);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
 
 exports.getStates = async (req, res) => {
     const { idPais } = req.params;
@@ -33,6 +43,20 @@ exports.getCities = async (req, res) => {
         res.status(200).json(cities);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error' }); 
+    }
+};
+
+exports.buscarPais = async (req, res) =>{
+    try {
+        const { dni } = req.params;
+
+        const especialidades = await db.sequelize.query(
+            `CALL buscarPaisProfesional("${dni}")`
+        );
+        return res.status(200).json(especialidades);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Server error" });
     }
 };

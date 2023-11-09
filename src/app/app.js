@@ -1,11 +1,13 @@
 const express = require("express");
 const logger = require("morgan");
-
 const http = require("http");
 const cors = require("cors"); // Import cors module
 const app = express();
+app.use(express.static('./uploads'))
 
-const PORT = 3000;
+
+
+const PORT = 3000;+
 app.use(cors());
 app.set("port", PORT);
 app.use(logger("dev"));

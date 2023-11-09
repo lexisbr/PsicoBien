@@ -33,11 +33,9 @@ module.exports = {
                     [Op.or]: [{ email: req.body.email }, { dni: req.body.dni }]
                 }
             });
-
             if (usuario) {
                 return res.status(409).send({ message: "El usuario ya existe" });
             }
-
             Usuarios.create({
                 dni: req.body.dni,
                 nombre: req.body.nombre,

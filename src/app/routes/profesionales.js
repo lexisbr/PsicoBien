@@ -4,11 +4,6 @@ const path = require('path');
 const router = express.Router();
 const profesionalController = require("../controllers/profesionalController");
 
-
-
-
-
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "./uploads"); // Directorio donde se guardarán las imágenes
@@ -34,8 +29,6 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 
-
-const profesionalController = require("../controllers/profesionalController");
 
 router.post(
   "/registrar-solicitud",

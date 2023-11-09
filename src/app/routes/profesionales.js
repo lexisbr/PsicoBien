@@ -30,12 +30,8 @@ const upload = multer({
 });
 
 
-router.post(
-  "/registrar-solicitud",
-  upload.single("titulo"),
-  profesionalController.createProfessionalRequest
-);
-router.post("/buscar", profesionalController.buscarProfesional);
+
+
 router.get(
   "/especialidades",
   profesionalController.obtenerEspecialidadesRegistradas

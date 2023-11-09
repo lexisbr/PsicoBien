@@ -25,37 +25,42 @@ module.exports = {
         });
     },
 
-    async registrar(req, res)  {
-        console.log(req.body);
-        const usuario = await Usuarios.findOne({
-            where: {
-                [Op.or]: [{ email: req.body.email }, { dni: req.body.dni }]
+    async registrar(req, res) {
+        try {
+            console.log(req.body);
+            const usuario = await Usuarios.findOne({
+                where: {
+                    [Op.or]: [{ email: req.body.email }, { dni: req.body.dni }]
+                }
+            });
+
+            if (usuario) {
+                return res.status(409).send({ message: "El usuario ya existe" });
             }
-        });
 
-        if (usuario) {
-            return res.status(409).send({ message: "El usuario ya existe" });
+            Usuarios.create({
+                dni: req.body.dni,
+                nombre: req.body.nombre,
+                apellido: req.body.apellido,
+                email: req.body.email,
+                fechaNacimiento: req.body.fechaNacimiento,
+                genero: req.body.genero,
+                telefono: req.body.telefono,
+                password: req.body.password,
+                idTipoUsuario: req.body.idTipoUsuario,
+                idCiudad: req.body.idCiudad,
+                estado: 1,
+                fechaCreacion: new Date(),
+            }).then(usuario => {
+                return res.status(200).send(usuario);
+            }).catch(err => {
+                console.log(err)
+                return res.status(500).send({ message: err.message });
+            });
+
+        } catch (error) {
+            console.log(error)
         }
-
-        Usuarios.create({
-            dni: req.body.dni,
-            nombre: req.body.nombre,
-            apellido: req.body.apellido,
-            email: req.body.email,
-            fechaNacimiento: req.body.fechaNacimiento,
-            genero: req.body.genero,
-            telefono: req.body.telefono,
-            password: req.body.password,
-            idTipoUsuario: req.body.idTipoUsuario,
-            idCiudad: req.body.idCiudad,
-            estado: 1,
-            fechaCreacion: new Date(),
-        }).then(usuario => {
-            return res.status(200).send(usuario);
-        }).catch(err => {
-            console.log(err)
-            return res.status(500).send({ message: err.message });
-        });
     },
     find(req, res) {
         return Usuarios.findAll()
@@ -68,33 +73,33 @@ module.exports = {
             .then(usuario => {
                 if (!usuario) {
                     return res.status(404).send({ error: 'Tipo de cliente no encontrado candy manca' });
-                } 
+                }
                 else {
                     return res.status(200).send(usuario);
                 }
             })
             .catch(error => res.status(400).send({ error: 'Error al realizar la consulta' }));
     },
-    updateFotoPerfil(req, res){
+    updateFotoPerfil(req, res) {
         const update = req.body;
         Usuarios.update({
             urlFotoPerfil: update.urlFotoPerfil
-        }), {where: {dni :update.dni}}
-        .then(urlPerfil => {
-            if (urlPerfil[0] === 0) {
-                return res.status(200).send({error: 'No se encontró ningún registro'});
-            }
-            else{
-                return res.status(200).send('El registro ha sido actualizado');
-            }
-        })
-        .catch(error => {
-            console.log(error)
-            return res.status(500).send({ error: 'Error al actualizar' });
-        });
+        }), { where: { dni: update.dni } }
+            .then(urlPerfil => {
+                if (urlPerfil[0] === 0) {
+                    return res.status(200).send({ error: 'No se encontró ningún registro' });
+                }
+                else {
+                    return res.status(200).send('El registro ha sido actualizado');
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                return res.status(500).send({ error: 'Error al actualizar' });
+            });
     }
     ,
-    async buscarClinicas(req, res){
+    async buscarClinicas(req, res) {
         try {
             const { colegiado } = req.params;
 
@@ -123,11 +128,11 @@ module.exports = {
     async agregarIdioma(req, res) {
         const idIdioma = req.body.idIdioma;
         const estado = true;
-        const fechaCreacion= new Date();
+        const fechaCreacion = new Date();
         const fechaFormateada = fechaCreacion.toISOString().split('T')[0];
-        const colegiadoProfesional= req.body.colegiadoProfesional;
+        const colegiadoProfesional = req.body.colegiadoProfesional;
         try {
-            
+
             const usuarios = await db.sequelize.query(
                 `INSERT INTO profesional_idiomas (idIdioma, estado, fechaCreacion, colegiadoProfesional) values ( ${idIdioma}, ${estado}, ${fechaFormateada}, ${colegiadoProfesional})`,
                 {
@@ -136,11 +141,11 @@ module.exports = {
                 }
             );
 
-            await res.status(200).json({idIdioma,colegiadoProfesional})
+            await res.status(200).json({ idIdioma, colegiadoProfesional })
 
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: 'Server error' }); 
+            res.status(500).json({ message: 'Server error' });
         }
     },
     async borrarIdioma(req, res) {
@@ -163,24 +168,24 @@ module.exports = {
     async agregarEspecialidad(req, res) {
         const especialidad = req.body.especialidad;
         const estado = true;
-        const fechaCreacion= new Date();
+        const fechaCreacion = new Date();
         const fechaFormateada = fechaCreacion.toISOString().split('T')[0];
-        const colegiadoProfesional= req.body.colegiadoProfesional;
+        const colegiadoProfesional = req.body.colegiadoProfesional;
         try {
-            
+
             const usuarios = await db.sequelize.query(
                 `INSERT INTO profesional_especialidades (colegiadoProfesional, especialidad, estado, fechaCreacion) values ( ?,?, ${estado}, ${fechaFormateada})`,
                 {
-                    replacements: [ colegiadoProfesional,especialidad],
+                    replacements: [colegiadoProfesional, especialidad],
                     type: db.Sequelize.QueryTypes.INSERT,
                 }
             );
 
-            await res.status(200).json({colegiadoProfesional})
+            await res.status(200).json({ colegiadoProfesional })
 
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: 'Server error' }); 
+            res.status(500).json({ message: 'Server error' });
         }
     },
     async borrarEspecialidad(req, res) {
@@ -200,6 +205,34 @@ module.exports = {
             return res.status(500).json({ message: "Server error" });
         }
     },
+    async agregarClinica(req, res) {
+        try {
+            const zona = req.body.zona;
+            const calle = req.body.calle;
+            const numero = req.body.numero;
+            const piso = req.body.piso;
+            const referencias_direccion = req.body.referencias_direccion;
+            const telefono = req.body.telefono;
+            const nombre = req.body.nombre;
+            const idCiudad = req.body.idCiudad;
+            const colegiadoProfesional = req.body.colegiadoProfesional;
+            const terminosDeAtencion = req.body.terminosDeAtencion;
+            const estado = true;
+
+            const usuarios = await db.sequelize.query(
+                `INSERT INTO clinicas (zona, calle, numero, piso, referencias_direccion, telefono, nombre, idCiudad, colegiadoProfesional, terminosDeAtencion, estado) VALUES(?,?,?,?,?,?,?,?,?,?,${estado})`,
+                {
+                    replacements: [zona, calle, numero, piso, referencias_direccion, telefono, nombre, idCiudad, colegiadoProfesional, terminosDeAtencion],
+                    type: db.Sequelize.QueryTypes.INSERT,
+                }
+            );
+            return res.status(200).json(usuarios);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Server error" });
+        }
+    }
+    ,
     async borrarClinica(req, res) {
         try {
             const { idClinica } = req.params;

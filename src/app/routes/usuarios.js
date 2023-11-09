@@ -4,6 +4,8 @@ const router = Router();
 const usuarioController = require('../controllers/usuarioController');
 
 router.post("/login", usuarioController.validateLogin);
+
+
 router.post("/registrar", usuarioController.registrar);
 router.get("/users",usuarioController.find)
 router.get("/users/:id",usuarioController.findId);
@@ -17,6 +19,7 @@ router.delete("/deleteIdioma/:idProfesionalIdiomas",usuarioController.borrarIdio
 router.post("/agregarEspecialidad",usuarioController.agregarEspecialidad);
 router.delete("/deleteEspecialidad/:idProfesionalEspecialidad",usuarioController.borrarEspecialidad)
 
+router.post("/agregarClinica",usuarioController.agregarClinica);
 router.delete("/deleteClinica/:idClinica",usuarioController.borrarClinica)
 
 

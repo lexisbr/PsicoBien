@@ -36,7 +36,10 @@ router.post(
   upload.single("titulo"),
   profesionalController.createProfessionalRequest
 );
-
 router.post("/buscar", profesionalController.buscarProfesional);
+router.get(
+  "/especialidades",
+  profesionalController.obtenerEspecialidadesRegistradas
+);
 
 module.exports = router;

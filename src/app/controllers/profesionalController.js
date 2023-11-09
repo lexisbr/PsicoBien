@@ -1,6 +1,8 @@
+const Sequelize = require("sequelize");
 const db = require("../../models");
 const Profesionales = db.profesionales;
 const Usuarios = db.usuarios;
+const ProfesionalEspecialidades = db.profesional_especialidades;
 
 module.exports = {
   async createProfessionalRequest(req, res) {
@@ -47,6 +49,18 @@ module.exports = {
         `CALL buscarProfesional("${nombreCompleto.trim()}", ${idCiudad}, "${especialidades}")`
       );
       return res.status(200).json(profesionales);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Server error" });
+    }
+  },
+  async obtenerEspecialidadesRegistradas(req, res) {
+    try {
+      const especialidades = await db.sequelize.query(
+        `CALL obtenerEspecialidades()`
+      );
+
+      return res.status(200).json(especialidades);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Server error" });

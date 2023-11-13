@@ -66,8 +66,8 @@ module.exports = {
             .catch(error => res.status(400).send(error))
     },
     findId(req, res) {
-        const DNI = req.params.id;
-        Usuarios.findByPk(DNI)
+        const idTipoUsuario = req.params.id;
+        Usuarios.findAll({where: {idTipoUsuario:idTipoUsuario} })
             .then(usuario => {
                 if (!usuario) {
                     return res.status(404).send({ error: 'Tipo de cliente no encontrado candy manca' });

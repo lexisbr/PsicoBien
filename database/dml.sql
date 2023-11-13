@@ -234,6 +234,26 @@ INSERT INTO profesionales (
     ("44444444","",100),
     ("55555555","",100);
 
+   
+INSERT INTO usuarios (
+    dni,
+    nombre,
+    apellido,
+    fechaNacimiento,
+    genero,
+    telefono,
+    email,
+    password,
+    urlFotoPerfil,
+    urlFotoPortada,
+    idTipoUsuario,
+    idCiudad,
+    estado,
+    fechaCreacion
+)
+VALUES (1,"Admin","Sistema","1990-04-15", "M", "96325412", "admin@gmail.com","123","","",1,1,1,utc_timestamp());
+
+   
 INSERT INTO usuarios (
     dni,
     nombre,
@@ -255,7 +275,7 @@ VALUES (10000002,"Emma","StonebuscaProfesional","1990-04-15", "M", "96325412", "
     (10000003,"Robert","Downey Jr","1990-04-15", "H", "96325412", "robertdowney@gmail.com","234","https://i.pinimg.com/564x/a2/6f/02/a26f022f95423ba4f4cfcd68b9a5c489.jpg","https://images5.alphacoders.com/403/thumb-1920-403881.jpg",2,"33333333",15,1,utc_timestamp()),
     (10000004,"Elizabeth","Olsen","1990-04-15", "M", "96325412", "elizabetholesen@gmail.com","234","https://i.pinimg.com/564x/20/d0/a4/20d0a49f1d5717e7ec956b9e1d190144.jpg","https://images5.alphacoders.com/489/489836.jpg",2,"44444444",14,1,utc_timestamp()),
     (10000005,"Ester","Esposito","1990-04-15", "M", "96325412", "estersposito@gmail.com","234","https://i.pinimg.com/564x/58/9b/1f/589b1f7715f6ea7ad06e746f7fdf2eb0.jpg","https://i.ytimg.com/vi/2VTwEXF_6zo/maxresdefault.jpg",2,"55555555",15,1,utc_timestamp());
-
+   
 INSERT INTO profesional_especialidades (
 	colegiadoProfesional,
     especialidad,
@@ -267,20 +287,20 @@ INSERT INTO profesional_especialidades (
 ("33333333","Mindfulness",1,utc_timestamp()),
 ("33333333","Terapia de Pareja",1,utc_timestamp());
 
-CALL buscarProfesional("",15,"'Mindfulness'");
-
-SELECT * FROM usuarios;
-
-SELECT 
-	dni,
-	nombre,
-	apellido,
-	email,
-    u.idCiudad
-FROM usuarios u
-;
-
-
-SELECT * FROM psicobien.tipos_usuario;
-
-SELECT * FROM psicobien.usuarios;
+INSERT INTO usuarios (
+    dni,
+    nombre,
+    apellido,
+    fechaNacimiento,
+    genero,
+    telefono,
+    email,
+    password,
+    urlFotoPerfil,
+    urlFotoPortada,
+    idTipoUsuario,
+    idCiudad,
+    estado,
+    fechaCreacion
+)
+VALUES (1,"Admin","Sistema","1990-04-15", "M", "96325412", "admin@gmail.com","123","","",1,16,1,utc_timestamp());

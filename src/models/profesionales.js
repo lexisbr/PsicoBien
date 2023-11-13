@@ -12,6 +12,14 @@ module.exports = function(sequelize, DataTypes) {
     },
     precioPorHora: {
       type: DataTypes.DECIMAL(10,0),
+      allowNull: true
+    },
+    fotoTitulo: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    estado: {
+      type: DataTypes.INTEGER,
       allowNull: false
     }
   }, {

@@ -1,14 +1,10 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('profesional_idiomas', {
-    idProfesionalIdiomas:{
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      primaryKey: true
-    },
     idIdioma: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
       references: {
         model: 'idiomas',
         key: 'idIdiomas'
@@ -16,11 +12,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     estado: {
       type: DataTypes.BOOLEAN,
-      allowNull: true
+      allowNull: false
     },
     fechaCreacion: {
       type: DataTypes.DATEONLY,
-      allowNull: true
+      allowNull: false
     },
     fechaActualizacion: {
       type: DataTypes.DATEONLY,
@@ -42,13 +38,6 @@ module.exports = function(sequelize, DataTypes) {
       {
         name: "PRIMARY",
         unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "idProfesionalIdiomas" },
-        ]
-      },
-      {
-        name: "fk_profesional_idiomas_idiomas1_idx",
         using: "BTREE",
         fields: [
           { name: "idIdioma" },

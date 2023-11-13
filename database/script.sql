@@ -24,7 +24,9 @@ USE `psicobien` ;
 CREATE TABLE IF NOT EXISTS `psicobien`.`profesionales` (
   `colegiado` VARCHAR(180) NOT NULL,
   `descripcion` VARCHAR(360) NULL,
-  `precioPorHora` DECIMAL(10, 2) NOT NULL,
+  `precioPorHora` DECIMAL(10, 2) NULL,
+  `fotoTitulo` TEXT NOT NULL,
+  `estado` INT NOT NULL,
   PRIMARY KEY (`colegiado`),
   UNIQUE INDEX `colegiado_UNIQUE` (`colegiado` ASC))
 ENGINE = InnoDB;

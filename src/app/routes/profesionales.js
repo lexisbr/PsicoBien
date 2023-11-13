@@ -37,11 +37,11 @@ router.get(
   profesionalController.obtenerEspecialidadesRegistradas
 );
 
-
-router.post("/registrar-solicitud",upload.single("titulo"),profesionalController.createProfessionalRequest);
+router.get("/",profesionalController.find)
+router.post("/registrar-solicitud",upload.single("file"),profesionalController.createProfessionalRequest);
 router.post('/portada', upload.single("file"),profesionalController.actualizarPortada)
 router.post('/perfil', upload.single("file"),profesionalController.actualizarPerfil)
 router.post("/buscar", profesionalController.buscarProfesional);
-router.get("/findData/:colegiado",profesionalController.findData);
+router.get("/:colegiado",profesionalController.findData);
 router.get("/datosProfesionales/:colegiado",profesionalController.datosProfesional);
 module.exports = router;

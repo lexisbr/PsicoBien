@@ -5,31 +5,32 @@ const Usuarios = db.usuarios;
 const ProfesionalEspecialidades = db.profesional_especialidades;
 
 module.exports = {
+  find(req, res) {
+    return Usuarios.findAll({ where: { estado: 1, idTipoUsuario: 2 } })
+      .then((usuario) => res.status(200).send(usuario))
+      .catch((error) => res.status(400).send(error));
+  },
   async createProfessionalRequest(req, res) {
     try {
-      const { dni, numeroColegiado } = req.body;
+      const { dni, colegiado } = req.body;
 
       const fotoTitulo = req.file;
 
-      const existingProfessional = await Profesionales.findOne({
-        numeroColegiado,
+      const existingProfessional = await Profesionales.findAll({
+        where: { colegiado: colegiado },
       });
-      if (existingProfessional) {
+      console.log(existingProfessional);
+      if (existingProfessional.lenght > 0) {
         return res
-          .status(400)
+          .status(500)
           .json({ message: "Numero de colegiado ya utilizado" });
       }
 
       const professional = new Profesionales({
-        fotoTitulo,
-        numeroColegiado,
+        fotoTitulo: "http://localhost:3000/" + fotoTitulo.filename,
+        colegiado,
         estado: 2,
       });
-
-      await Usuarios.update(
-        { colegiadoProfesional: numeroColegiado },
-        { where: { dni } }
-      );
 
       await professional.save();
 
@@ -45,7 +46,7 @@ module.exports = {
     try {
       const { nombreCompleto, especialidades, idEstado } = req.body;
       console.log(especialidades);
-      
+
       const profesionales = await db.sequelize.query(
         `CALL buscarProfesional("${nombreCompleto?.trim()}", ${idEstado}, "${especialidades}")`
       );
@@ -73,8 +74,8 @@ module.exports = {
   async findData(req, res) {
     const { colegiado } = req.params;
     try {
-      const countries = await Profesionales.findAll({ where: { colegiado } });
-      res.status(200).json(countries);
+      const data = await Profesionales.findAll({ where: { colegiado } });
+      res.status(200).json(data);
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Server error" });

@@ -7,7 +7,7 @@ router.post("/login", usuarioController.validateLogin);
 
 
 router.post("/registrar", usuarioController.registrar);
-router.get("/users",usuarioController.find)
+
 router.get("/users/:id",usuarioController.findId);
 router.get("/userEspecialidad/:dni",usuarioController.buscarEspecialidad);
 

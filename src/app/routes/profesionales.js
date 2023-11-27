@@ -38,10 +38,22 @@ router.get(
 );
 
 router.get("/",profesionalController.find)
+router.get("/find1",profesionalController.find2)
+
 router.post("/registrar-solicitud",upload.single("file"),profesionalController.createProfessionalRequest);
 router.post('/portada', upload.single("file"),profesionalController.actualizarPortada)
 router.post('/perfil', upload.single("file"),profesionalController.actualizarPerfil)
+
 router.post("/buscar", profesionalController.buscarProfesional);
+
 router.get("/:colegiado",profesionalController.findData);
 router.get("/datosProfesionales/:colegiado",profesionalController.datosProfesional);
+
+router.get("/pagadoMes/:mes",profesionalController.obtenerProfesionalMejorPagadoMes);
+router.get("/pagadoAnio/:anio",profesionalController.obtenerProfesionalMejorPagadoAnio);
+router.get("/pagadoAnioTop/:anio",profesionalController.obtenerProfesionalTopMejorPagadoAnio);
+router.get("/pagadoMesTop/:mes",profesionalController.obtenerProfesionalTopMejorPagadoMes);
+
+router.get("/clientestop/:limit",profesionalController.obtenerClientesTop);
+router.get("/citasP/:colegiado",profesionalController.obtenerCitasP);
 module.exports = router;

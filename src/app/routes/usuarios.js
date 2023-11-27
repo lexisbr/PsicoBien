@@ -21,6 +21,6 @@ router.delete("/deleteEspecialidad/:idProfesionalEspecialidad",usuarioController
 
 router.post("/agregarClinica",usuarioController.agregarClinica);
 router.delete("/deleteClinica/:idClinica",usuarioController.borrarClinica)
-
+router.get("/obtenerCitasPaciente/:dni",usuarioController.ObtenerCitasPaciente)
 
 module.exports = router; 

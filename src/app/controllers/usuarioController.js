@@ -259,4 +259,16 @@ module.exports = {
             return res.status(500).json({ message: "Server error" });
         }
     },
+    async ObtenerCitasPaciente(req, res){
+        const { dni } = req.params;
+        try {
+          const citas = await db.sequelize.query(
+            `CALL obtenerCitasPaciente(${dni})`
+          );
+          return res.status(200).json(citas);
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ error });
+        }
+      }
 };

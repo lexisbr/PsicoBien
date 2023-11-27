@@ -10,6 +10,18 @@ module.exports = {
       .then((usuario) => res.status(200).send(usuario))
       .catch((error) => res.status(400).send(error));
   },
+  async find2(req, res) {
+    try {
+      const especialidades = await db.sequelize.query(
+        `select * from usuarios LIMIT 5`
+      );
+
+      return res.status(200).json(especialidades);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Server error" });
+    }
+  },
   async createProfessionalRequest(req, res) {
     try {
       const { dni, colegiado } = req.body;
@@ -69,6 +81,76 @@ module.exports = {
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Server error" });
+    }
+  },
+  async obtenerProfesionalMejorPagadoMes(req, res) {
+    const { mes } = req.params;
+
+    try {
+      const especialidades = await db.sequelize.query(
+        `CALL psicologoMejorPagadoMes(${mes})`
+      );
+      console.log("Mes actual",mes)
+      return res.status(200).json(especialidades);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error });
+    }
+  },
+  async obtenerProfesionalMejorPagadoAnio(req, res) {
+    const { anio } = req.params;
+
+    try {
+      const psicologostop = await db.sequelize.query(
+        `CALL psicologoMejorPagadoAño(${anio})`
+      );
+      console.log("Año actual",anio)
+      return res.status(200).json(psicologostop);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error });
+    }
+  },
+  async obtenerClientesTop(req, res) {
+    const { limit } = req.params;
+
+    try {
+      const clientesTop = await db.sequelize.query(
+        `CALL clienteConMasCitas(${limit})`
+      );
+      console.log("Año actual",limit)
+      return res.status(200).json(clientesTop);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error });
+    }
+  },
+  async obtenerProfesionalTopMejorPagadoMes(req, res) {
+    const { mes } = req.params;
+
+    try {
+      const especialidades = await db.sequelize.query(
+        `CALL top5Mes(${mes})`
+      );
+      console.log("Mes actual",mes)
+      return res.status(200).json(especialidades);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error });
+    }
+  },
+  async obtenerProfesionalTopMejorPagadoAnio(req, res) {
+    const { anio } = req.params;
+
+    try {
+      const especialidades = await db.sequelize.query(
+        `CALL top5año(${anio})`
+      );
+      console.log("Mes actual",anio)
+      return res.status(200).json(especialidades);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error });
     }
   },
   async findData(req, res) {
@@ -142,4 +224,16 @@ module.exports = {
       res.status(500).json({ message: "Server error" });
     }
   },
+  async obtenerCitasP(req, res){
+    const { colegiado } = req.params;
+    try {
+      const citas = await db.sequelize.query(
+        `CALL obtenerCitasProfesional(${colegiado})`
+      );
+      return res.status(200).json(citas);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error });
+    }
+  }
 };

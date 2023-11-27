@@ -3,7 +3,8 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('eventos', {
     idEvento: {
       type: DataTypes.BIGINT,
-      allowNull: false,
+      autoIncrement: true,
+      allowNull: true,
       primaryKey: true
     },
     descripcion: {
